@@ -46,19 +46,19 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String address = binding.findInputBar.getText().toString();
-                ArrayList<Double> coordinates = getLocationFromAddress(address);
-
-                if(coordinates.size()>0){
-                    long success = mDatabaseHelper.addData(address, Double.toString(coordinates.get(0)), Double.toString(coordinates.get(1)));
-                    if (success > 0){
-                        Toast.makeText(requireContext() , "Added Successful", Toast.LENGTH_LONG).show();
+                if(!address.isEmpty()){
+                    ArrayList<Double> coordinates = getLocationFromAddress(address);
+                    if(coordinates.size()>0){
+                        long success = mDatabaseHelper.addData(address, Double.toString(coordinates.get(0)), Double.toString(coordinates.get(1)));
+                        if (success > 0){
+                            Toast.makeText(requireContext() , "Added Successful", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
-                        Toast.makeText(requireContext() , "Error while adding", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext() , "No data with given address", Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(requireContext() , "No data with given address", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext() , "Enter address", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -73,7 +73,7 @@ public class MainFragment extends Fragment {
                     binding.latitude.setVisibility(View.VISIBLE);
                     binding.longitude.setVisibility(View.VISIBLE);
                 }else{
-                    Toast.makeText(requireContext() , "No data with given address", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext() , "No data with given address", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -82,16 +82,20 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String address = binding.findInputBar.getText().toString();
-                ArrayList<Double> coordinates = getLocationFromAddress(address);
-                if(coordinates.size() > 0){
-                    int success = mDatabaseHelper.update(address, Double.toString(coordinates.get(0)), Double.toString(coordinates.get(1)));
-                    if (success > 0){
-                        Toast.makeText(requireContext() , "Update Successful", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(requireContext() , "No address: " + address + " in the database", Toast.LENGTH_LONG).show();
+                if(!address.isEmpty()) {
+                    ArrayList<Double> coordinates = getLocationFromAddress(address);
+                    if (coordinates.size() > 0) {
+                        int success = mDatabaseHelper.update(address, String.format("%.2f", coordinates.get(0)), String.format("%.2f", coordinates.get(1)));
+                        if (success > 0) {
+                            Toast.makeText(requireContext(), "Update Successful", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireContext(), "No address: " + address + " in the database", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "No data with given address", Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(requireContext() , "No data with given address", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), "Enter address", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -104,7 +108,7 @@ public class MainFragment extends Fragment {
                 if (success > 0){
                     Toast.makeText(requireContext(), "Delete Successful", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(requireContext(), "No data with given address", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), "No data with given address", Toast.LENGTH_SHORT).show();
                 }
             }
         });

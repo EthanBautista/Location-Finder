@@ -55,18 +55,16 @@ public class CoordinateFragment extends Fragment {
                 String lng = binding.longInputBar.getText().toString();
                 if(!lat.isEmpty() && !lng.isEmpty()){
                     address = getAddressFromCoords(Double.parseDouble(lat), Double.parseDouble(lng));
-                    if(!address.isEmpty()){
+                    if(!address.isEmpty()) {
                         long success = mDatabaseHelper.addData(address.toLowerCase(), lat, lng);
-                        if (success > 0){
-                            Toast.makeText(requireContext() , "Added Successful", Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(requireContext() , "Error while adding", Toast.LENGTH_LONG).show();
+                        if (success > 0) {
+                            Toast.makeText(requireContext(), "Added Successful", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(requireContext(), "Error while adding", Toast.LENGTH_LONG).show();
                         }
-                    }else{
-                        Toast.makeText(requireContext() , "No data with given coordinates", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(requireContext() , "No data with given coordinates", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext() , "Enter coordinates", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -145,21 +143,22 @@ public class CoordinateFragment extends Fragment {
         if (Geocoder.isPresent()){
             Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
             try {
-                List<Address> ls = geocoder.getFromLocation(lat,  lng, 1);
-                String address = "";
-                for (Address addr: ls) {
-                    String name = addr.getFeatureName();
-                    address = addr.getAddressLine(0);
-                    String city = addr.getLocality();
-                    String county = addr.getSubAdminArea();
-                    String prov = addr.getAdminArea();
-                    String country = addr.getCountryName();
-                    String postalCode = addr.getPostalCode();
-                    String phone = addr.getPhone();
-                    String url = addr.getUrl();
+                if ((-90 <= lat && lat < 90) && (-180 <= lng && lng <= 180)){
+                    List<Address> ls = geocoder.getFromLocation(lat,  lng, 1);
+                    String address = "";
+                    for (Address addr: ls) {
+                        String name = addr.getFeatureName();
+                        address = addr.getAddressLine(0);
+                        String city = addr.getLocality();
+                        String county = addr.getSubAdminArea();
+                        String prov = addr.getAdminArea();
+                        String country = addr.getCountryName();
+                        String postalCode = addr.getPostalCode();
+                        String phone = addr.getPhone();
+                        String url = addr.getUrl();
+                    }
+                    return address;
                 }
-
-                return address;
             } catch (IOException e) {
                 e.printStackTrace();
             }}
