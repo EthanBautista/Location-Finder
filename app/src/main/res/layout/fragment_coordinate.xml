@@ -110,7 +110,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:backgroundTint="#18225E"
-            android:text="@string/get_coordinates_label"
+            android:text="@string/get_address_label"
             android:textSize="13sp"
             app:layout_constraintEnd_toStartOf="@+id/addButton"
             app:layout_constraintStart_toStartOf="parent"
