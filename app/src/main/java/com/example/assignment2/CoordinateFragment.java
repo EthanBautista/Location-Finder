@@ -129,6 +129,7 @@ public class CoordinateFragment extends Fragment {
         });
     }
 
+    // Retrieve address from the database given the coordinates
     public String getAddressFromDatabase(String lat, String lng){
         Cursor data = mDatabaseHelper.getAddress(lat, lng);
         String address = "";
@@ -138,6 +139,7 @@ public class CoordinateFragment extends Fragment {
         return address;
     }
 
+    // Retrieve address using geocoding given the coordinates
     public String getAddressFromCoords(double lat, double lng){
 
         if (Geocoder.isPresent()){

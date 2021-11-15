@@ -39,6 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         return data;
     }
+
+    // Get the row which contains the given address
     public Cursor getCoordinates(String address) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE "+ COL2 +"='"+address.toLowerCase()+"'";
@@ -47,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return data;
     }
 
+    // Get the row which contains the given coordinates
     public Cursor getAddress(String lat, String lng) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE "+ COL3 +"='"+lat+"' AND " + COL4 + "='"+ lng +"'";
@@ -55,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return data;
     }
 
+    // Insert data to the database
     public long addData(String address, String lat, String lng){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -66,6 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return result;
     }
 
+    // Update an existing entry in the database
     public int update(String address, String lat, String lng) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -77,17 +82,20 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return success;
     }
 
+    // Delete an entry given the id
     public void delete(String id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME,"ID=?",new String[]{id});
     }
 
+    // Delete an entry given the address
     public int deleteGivenAddress(String address){
         SQLiteDatabase db = this.getWritableDatabase();
         int success = db.delete(TABLE_NAME,COL2+"=?",new String[]{address.toLowerCase()});
         return success;
     }
 
+    // Delete an entry given the coordinates
     public int deleteGivenCoordinates(String lat, String lng){
         SQLiteDatabase db = this.getWritableDatabase();
         int success = db.delete(TABLE_NAME,COL3+"=? AND " + COL4+"=?",new String[]{lat, lng});

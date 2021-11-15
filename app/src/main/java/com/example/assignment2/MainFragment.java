@@ -128,6 +128,7 @@ public class MainFragment extends Fragment {
         binding = null;
     }
 
+    // Retrieve the coordinates from the database given the address
     public ArrayList<String> getCoordinatesFromDatabase(String address){
         Cursor data = mDatabaseHelper.getCoordinates(address);
         ArrayList<String> coords = new ArrayList<>();
@@ -138,6 +139,8 @@ public class MainFragment extends Fragment {
         return coords;
     }
 
+
+    // Retrieve coordinates using geocoding given the address
     public ArrayList<Double> getLocationFromAddress(String address){
 
         if (Geocoder.isPresent()) {
