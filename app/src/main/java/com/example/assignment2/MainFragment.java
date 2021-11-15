@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class MainFragment extends Fragment {
 
@@ -33,6 +34,22 @@ public class MainFragment extends Fragment {
     ) {
         mDatabaseHelper = new DatabaseHelper(requireContext());
         binding = FragmentMainBinding.inflate(inflater, container, false);
+
+        // Create database with 50 locations
+        if(mDatabaseHelper.checkEmpty()){
+            Random rand = new Random();
+            mDatabaseHelper.addData("2000 Simcoe St N", "43.95", "-78.89");
+            mDatabaseHelper.addData("Taj Mahal", "27.18", "78.04");
+            mDatabaseHelper.addData("419 King St W, Oshawa", "43.89", "-78.88");
+            mDatabaseHelper.addData("220 Yonge St, Toronto", "43.65", "-79.38");
+            mDatabaseHelper.addData("1800 Sheppard Ave, North York", "43.76", "-79.41");
+            for (int i = 0; i < 45; i++){
+                int latitude = rand.nextInt(90) * (rand .nextBoolean() ? -1 : 1);
+                int longitude = rand.nextInt(180) * (rand .nextBoolean() ? -1 : 1);
+                String address = getAddressFromCoords(Double.valueOf(latitude), Double.valueOf(longitude));
+                mDatabaseHelper.addData(address, Integer.toString(latitude), Integer.toString(longitude));
+            }
+        }
         return binding.getRoot();
 
     }
@@ -157,5 +174,33 @@ public class MainFragment extends Fragment {
                 e.printStackTrace();
             }}
         return null;
+    }
+
+    // Retrieve address using geocoding given the coordinates
+    public String getAddressFromCoords(double lat, double lng){
+
+        if (Geocoder.isPresent()){
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            try {
+                if ((-90 <= lat && lat < 90) && (-180 <= lng && lng <= 180)){
+                    List<Address> ls = geocoder.getFromLocation(lat,  lng, 1);
+                    String address = "";
+                    for (Address addr: ls) {
+                        String name = addr.getFeatureName();
+                        address = addr.getAddressLine(0);
+                        String city = addr.getLocality();
+                        String county = addr.getSubAdminArea();
+                        String prov = addr.getAdminArea();
+                        String country = addr.getCountryName();
+                        String postalCode = addr.getPostalCode();
+                        String phone = addr.getPhone();
+                        String url = addr.getUrl();
+                    }
+                    return address;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }}
+        return "";
     }
 }

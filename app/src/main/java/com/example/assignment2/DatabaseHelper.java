@@ -3,10 +3,12 @@ package com.example.assignment2;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
+import java.util.Random;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String TAG = "DatabaseHelper";
@@ -25,6 +27,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db){
         String createTable = "CREATE TABLE " + TABLE_NAME + " ("+COL1+" INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT, "  + COL3 + " TEXT, "  + COL4+ " TEXT) ";
         db.execSQL(createTable);
+        Random rand = new Random();
+        for (int i = 0; i < 45; i++){
+            int latitude = rand.nextInt(90) * (rand .nextBoolean() ? -1 : 1);
+            int longitude = rand.nextInt(90) * (rand .nextBoolean() ? -1 : 1);
+        }
     }
 
     @Override
@@ -100,5 +107,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         int success = db.delete(TABLE_NAME,COL3+"=? AND " + COL4+"=?",new String[]{lat, lng});
         return success;
+    }
+
+    // Check if database is empty
+    public boolean checkEmpty(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return DatabaseUtils.queryNumEntries(db, TABLE_NAME) == 0;
     }
 }
